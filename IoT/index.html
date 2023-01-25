@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<body>
+
+    <section class=" wrapper shadow text-center w-100" style="background-color: #4B515D;">
+        <nav class="navbar navbar-light bg-dark px-5 py-4">
+        <div class="text-dark d-flex align-items-center justify-content-center">
+           
+            <h5 class="text-white m-0 ml-2">HOME SECURITY <span class="text-primary">motion detection</span></h5>
+        </div>
+
+        </div>
+            
+          </nav>
+        <div class="container">
+            
+            <div class="row d-flex justify-content-center align-items-center pt-5">
+                <div class="col-md-8 col-lg-6 col-xl-4">
+                    
+                <div class="card bg-dark p-3 shadow" style="color: #4B515D; border-radius: 35px;" >
+                    <div class="text-center">
+                        <div>
+                        <i class="fa-solid fa-circle-exclamation index-1 fa-5x text-warning pt-4"></i>
+                    </div>
+                    <div class="pt-2">
+                        <small class="text-white">Attention</small>
+                    </div>
+                        <div id="motion" class="pt-3 h3 text-white">
+                        </div>
+                        <div>
+                            <input type="button" class="btn btn-success shadow" value="On" id="on">
+                            <input type="button" class="btn btn-danger shadow" value="Off" id="off">
+                        </div>
+                    <div class="pt-4 h5" id="alarmenabled">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+</div>
+<div class="bg-white w-25 h-25 mx-auto mt-5 p-3 rounded shadow" id="movement">
+    Hover with cursor to activate alarm
+</div>
+</section>
+
+
+    <script type="module">
+
+        // Import the functions you need from the SDKs you need
+      
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
+        import { getDatabase, ref, onValue, set, get, child } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-database.js";
+      
+      
+        // TODO: Add SDKs for Firebase products that you want to use
+      
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+
+            apiKey: "AIzaSyDlY9lEYfRWiWdgLRbm8QfJMMmO6FkZ1ik",
+
+            authDomain: "firealarm-2b969.firebaseapp.com",
+
+            databaseURL: "https://firealarm-2b969-default-rtdb.europe-west1.firebasedatabase.app",
+
+            projectId: "firealarm-2b969",
+
+            storageBucket: "firealarm-2b969.appspot.com",
+
+            messagingSenderId: "265260690843",
+
+            appId: "1:265260690843:web:49685ba4151b9def9c853e"
+
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        var audio = new Audio('Alarm-Fast-A1-www.fesliyanstudios.com.mp3');
+        let motionEl = document.getElementById("motion");
+        var onBtn = document.getElementById("on");
+        var offBtn = document.getElementById("off");
+        let enabledEl = document.getElementById("alarmenabled");
+
+      
+        const motion = ref(db, 'motion');
+        onValue(motion, (snapshot) => {
+            const data = snapshot.val();
+            if(data) {
+                motionEl.innerHTML = "Motion detected!"
+            } else {
+                motionEl.innerHTML = "No motion detected!"
+            }
+        });    
+        
+        const alarmEnabled = ref(db, 'alarmenabled');
+        onValue(alarmEnabled, (snapshot) => {
+            const data = snapshot.val();
+            if(data) {
+                enabledEl.innerHTML = "Alarm is enabled"
+            } else {
+                enabledEl.innerHTML = "Warning: Alarm is disabled"
+            }
+        });    
+
+        onBtn.addEventListener('click', () => {
+            set(ref(db, 'alarmenabled'),
+                true
+            );
+
+            audio.play();
+        });
+
+        offBtn.addEventListener('click', () => {
+
+             set(ref(db, 'alarmenabled'), 
+                false
+            );
+
+            set(ref(db, 'motion'), 
+                false
+            );
+
+            audio.pause();
+        });
+
+        // Catch movement
+        let movementEl = document.getElementById("movement");
+        movementEl.addEventListener('mouseover', ()=> {
+            set(ref(db, 'motion'), 
+                true
+            );
+
+            set(ref(db, 'alarmenabled'), 
+                true
+            );
+
+            audio.play();
+        })
+
+      
+      </script>
+    
+</body>
+</html>
+
+
+<style>
+    html, body{
+      height: 100%;
+    }
+    .wrapper {
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      height: 100%;
+      background-image: url('https://media-exp1.licdn.com/dms/image/C561BAQGfEhGPeVC6Yg/company-background_10000/0/1519798318510?e=2159024400&v=beta&t=7afXhqZPYPEH-PAMW_EJKhol_ZADnzfZubuIfyZ2nJI');
+    }
+  
+  
+    
+  </style>
