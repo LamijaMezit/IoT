@@ -1,11 +1,11 @@
 # IoT
 
-Seminarski rad iz predmeta Internet of Things - Sigurnosni sistem za detekciju provale. 
+Work from the subject Internet of Things - Security system for burglary detection. 
 
-KOMPONENTE
+COMPONENTS
 • NodeMCU/Arduino Uno
 • Breadboard 
-• Led diode
-• Kablovi
-• Pir module senzor
+• LEDs
+•Cables
+• Pir module sensor
 • Piezo buzzer
